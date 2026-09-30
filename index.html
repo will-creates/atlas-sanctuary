@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html class="dark scroll-smooth" lang="en">
+<head>
+  <title>Atlas Sanctuary — Unleash Your Inner Athlete</title>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#FC4C13",
+            "secondary": "#e0c298",
+            "background": "#0A0A0A",
+            "surface": "#121212",
+            "surface-container": "#141414",
+            "surface-container-high": "#1B1B1B",
+            "surface-container-highest": "#242424",
+            "surface-container-low": "#0F0F0F",
+            "surface-container-lowest": "#080808",
+            "on-surface": "#F2EFE9",
+            "on-surface-variant": "#9E9A95",
+            "outline": "#44413E",
+            "outline-variant": "#262523"
+          },
+          borderRadius: {
+            "DEFAULT": "0.375rem",
+            "lg": "0.75rem",
+            "xl": "1rem",
+            "2xl": "1.25rem",
+            "full": "9999px"
+          },
+          fontFamily: {
+            sans: ["Manrope", "sans-serif"],
+            body: ["Manrope", "sans-serif"],
+            mono: ["JetBrains Mono", "monospace"]
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    @layer base {
+      html, body {
+        margin: 0;
+        padding: 0;
+        background-color: #0A0A0A;
+        color: #F2EFE9;
+      }
+      ::-webkit-scrollbar { display: none; }
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    }
+
+    /* Elegant scroll-reveal transitions */
+    .reveal-on-scroll {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+    .reveal-on-scroll.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .stagger-1 { transition-delay: 80ms; }
+    .stagger-2 { transition-delay: 160ms; }
+    .stagger-3 { transition-delay: 240ms; }
+    .stagger-4 { transition-delay: 320ms; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal-on-scroll {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-background font-body text-on-surface antialiased selection:bg-primary selection:text-white">
+<!-- Scroll Progress Indicator -->
+<div class="fixed top-0 left-0 h-[2px] bg-primary z-50 transition-all duration-150" id="scroll-progress" style="width: 0%"></div>
+<!-- Header -->
+<header class="fixed top-0 w-full z-40 transition-all duration-300 bg-background/60 backdrop-blur-md border-b border-white/5" id="site-header">
+<div class="h-20 w-full max-w-7xl mx-auto px-6 md:px-10 flex items-center justify-between">
+<div class="flex items-center gap-10">
+<a class="flex items-center gap-3 group" href="#">
+<div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center transition-colors group-hover:bg-primary">
+<svg class="w-4 h-4 fill-current text-white" viewbox="0 0 24 24">
+<polygon points="12 2 22 20 2 20"></polygon>
+</svg>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-bold text-lg tracking-tight text-on-surface">Atlas</span>
+<span class="text-xs font-mono text-secondary uppercase tracking-widest pl-2 border-l border-white/10">Sanctuary</span>
+</div>
+</a>
+<nav class="hidden lg:flex items-center gap-8 text-sm font-medium text-on-surface-variant">
+<a class="text-white hover:text-primary transition-colors" href="#disciplines">Disciplines</a>
+<a class="hover:text-white transition-colors" href="#merchandise">Shop</a>
+<a class="hover:text-white transition-colors" href="membership.html">Membership</a>
+<a class="hover:text-white transition-colors" href="#locations">Locations</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 bg-surface-container rounded-full text-xs font-mono text-secondary border border-white/5">
+<span>Obsidian Tier</span>
+</button>
+<a class="hidden md:inline-flex items-center px-6 py-2.5 bg-primary text-white font-semibold text-sm rounded-full hover:bg-[#e0400c] shadow-lg shadow-primary/20 transition-all duration-300" href="membership.html">
+          Join the Club
+        </a>
+<button aria-label="Cart" class="relative w-9 h-9 rounded-full bg-surface-container-high border border-white/10 flex items-center justify-center text-on-surface hover:border-primary transition-colors" id="cart-trigger" onclick="openCart()">
+<span class="material-symbols-outlined text-[18px]">shopping_bag</span>
+<span class="hidden absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 rounded-full bg-primary text-white text-[10px] font-mono font-semibold items-center justify-center" id="cart-badge">0</span>
+</button>
+<button aria-label="Account" class="w-9 h-9 rounded-full bg-surface-container-high border border-white/10 flex items-center justify-center text-on-surface hover:border-primary transition-colors" onclick="document.getElementById('profile-drawer').classList.remove('hidden')">
+<span class="material-symbols-outlined text-[18px]">person</span>
+</button>
+</div>
+</div>
+</header>
+<main class="w-full pt-20">
+<!-- HERO SECTION -->
+<section class="relative w-full min-h-[90vh] flex items-center justify-center overflow-hidden bg-surface-container-lowest">
+<!-- Original Image restored -->
+<div class="absolute inset-0 z-0 opacity-40 mix-blend-luminosity bg-cover bg-center" style="background-image: url('img/background.jpg')"></div>
+<!-- Ambient Luxury Gradient & Vignette -->
+<div class="absolute inset-0 z-0 bg-gradient-to-b from-background/70 via-background/40 to-background"></div>
+<div class="absolute top-1/4 right-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[140px] pointer-events-none"></div>
+<div class="relative z-10 w-full max-w-5xl mx-auto px-6 md:px-10 py-24 text-center flex flex-col items-center">
+<!-- Subtitle Pill -->
+<div class="reveal-on-scroll inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-8">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+<span class="text-xs font-mono uppercase tracking-widest text-secondary">Sanctuary 2025</span>
+<span class="text-outline text-xs">/</span>
+<span class="text-xs font-mono text-on-surface-variant">New York • London • Tokyo</span>
+</div>
+<!-- Hero Headline in Title Case -->
+<h1 class="reveal-on-scroll stagger-1 font-extrabold text-5xl sm:text-7xl md:text-8xl tracking-tight text-on-surface leading-[1.05] max-w-4xl">
+          Unleash Your <br class="hidden sm:inline"/>
+<span class="text-transparent bg-clip-text bg-gradient-to-r from-on-surface via-primary to-secondary">Inner Athlete</span>
+</h1>
+<!-- Clean Luxury Tagline -->
+<p class="reveal-on-scroll stagger-2 mt-6 text-lg sm:text-xl text-on-surface-variant max-w-2xl font-normal leading-relaxed">
+          Elite conditioning and restorative wellness engineered for high performance.
+        </p>
+<!-- CTAs -->
+<div class="reveal-on-scroll stagger-3 mt-10 flex flex-col sm:flex-row items-center gap-4">
+<a class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-3.5 bg-primary text-white font-semibold text-sm rounded-full hover:bg-[#e0400c] shadow-xl shadow-primary/25 transition-all duration-300 group" href="membership.html">
+<span>Join Now</span>
+<span class="material-symbols-outlined text-[18px] transition-transform group-hover:translate-x-0.5">arrow_forward</span>
+</a>
+<button class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-white text-black font-semibold text-sm rounded-full hover:bg-neutral-200 transition-all duration-300" onclick="document.getElementById('tour-drawer').classList.remove('hidden')">
+<span class="material-symbols-outlined text-[18px]">calendar_month</span>
+<span>Book Private Tour</span>
+</button>
+</div>
+<!-- Understated Metrics Strip -->
+<div class="reveal-on-scroll stagger-4 mt-20 grid grid-cols-2 md:grid-cols-4 gap-6 pt-10 border-t border-white/5 w-full">
+<div>
+<div class="font-bold text-2xl text-on-surface">4</div>
+<div class="text-xs text-on-surface-variant mt-0.5">Flagship Sanctuaries</div>
+</div>
+<div>
+<div class="font-bold text-2xl text-on-surface">1-on-1</div>
+<div class="text-xs text-on-surface-variant mt-0.5">Biometric Precision</div>
+</div>
+<div>
+<div class="font-bold text-2xl text-on-surface">-110°C</div>
+<div class="text-xs text-on-surface-variant mt-0.5">Thermal Hydrotherapy</div>
+</div>
+<div>
+<div class="font-bold text-2xl text-on-surface">99.4%</div>
+<div class="text-xs text-on-surface-variant mt-0.5">Member Retention</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 2: DISCIPLINES -->
+<section class="w-full max-w-7xl mx-auto px-6 md:px-10 py-28" id="disciplines">
+<!-- Clean Section Header -->
+<div class="reveal-on-scroll max-w-2xl mb-14">
+<span class="text-xs font-mono uppercase tracking-widest text-secondary">Core Arenas</span>
+<h2 class="font-extrabold text-3xl sm:text-5xl tracking-tight text-on-surface mt-2">
+          Transform Your Fitness Journey
+        </h2>
+<p class="text-on-surface-variant text-base sm:text-lg mt-3">
+          Four distinct arenas engineered for kinetic strength, conditioning, and cellular restoration.
+        </p>
+</div>
+<!-- Disciplines Grid -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Discipline 01 -->
+<div class="reveal-on-scroll md:col-span-7 group relative bg-surface-container rounded-2xl overflow-hidden min-h-[420px] flex flex-col justify-between p-8 border border-white/5 hover:border-white/10 transition-colors">
+<div class="absolute inset-0 opacity-35 transition-transform duration-700 group-hover:scale-105 bg-cover bg-center" style="background-image: url('img/discipline1.jpg')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container via-surface-container/50 to-transparent"></div>
+<div class="relative z-10">
+<span class="font-mono text-xs text-secondary tracking-widest uppercase">01 // Strength</span>
+</div>
+<div class="relative z-10">
+<h3 class="font-bold text-2xl sm:text-3xl text-on-surface group-hover:text-primary transition-colors">
+              Strength & Conditioning
+            </h3>
+<p class="text-on-surface-variant text-sm sm:text-base mt-2 max-w-lg">
+              Olympic platforms and velocity-based tracking tuned directly to your metabolic profile.
+            </p>
+<div class="mt-6 flex items-center gap-2 text-xs font-mono text-secondary">
+<span>View Protocol</span>
+<span class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</div>
+</div>
+<!-- Discipline 02 -->
+<div class="reveal-on-scroll stagger-1 md:col-span-5 group relative bg-surface-container rounded-2xl overflow-hidden min-h-[420px] flex flex-col justify-between p-8 border border-white/5 hover:border-white/10 transition-colors">
+<div class="absolute inset-0 opacity-30 transition-transform duration-700 group-hover:scale-105 bg-cover bg-center" style="background-image: url('img/discipline2.png')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container via-surface-container/50 to-transparent"></div>
+<div class="relative z-10">
+<span class="font-mono text-xs text-secondary tracking-widest uppercase">02 // Cardio</span>
+</div>
+<div class="relative z-10">
+<h3 class="font-bold text-2xl sm:text-3xl text-on-surface group-hover:text-primary transition-colors">
+              Rhythm & Kinetic Cardio
+            </h3>
+<p class="text-on-surface-variant text-sm sm:text-base mt-2">
+              High-output plyometrics and cardio calibrated to immersive spatial audio.
+            </p>
+<div class="mt-6 flex items-center gap-2 text-xs font-mono text-secondary">
+<span>View Protocol</span>
+<span class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</div>
+</div>
+<!-- Discipline 03 -->
+<div class="reveal-on-scroll md:col-span-5 group relative bg-surface-container rounded-2xl overflow-hidden min-h-[400px] flex flex-col justify-between p-8 border border-white/5 hover:border-white/10 transition-colors">
+<div class="absolute inset-0 opacity-30 transition-transform duration-700 group-hover:scale-105 bg-cover bg-center" style="background-image: url('img/discipline3.png')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container via-surface-container/50 to-transparent"></div>
+<div class="relative z-10">
+<span class="font-mono text-xs text-secondary tracking-widest uppercase">03 // Recovery</span>
+</div>
+<div class="relative z-10">
+<h3 class="font-bold text-2xl sm:text-3xl text-on-surface group-hover:text-primary transition-colors">
+              Infrared Yoga & Recovery
+            </h3>
+<p class="text-on-surface-variant text-sm sm:text-base mt-2">
+              Cellular detoxification and fascial restoration under pharmaceutical radiant warmth.
+            </p>
+<div class="mt-6 flex items-center gap-2 text-xs font-mono text-secondary">
+<span>View Protocol</span>
+<span class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</div>
+</div>
+<!-- Discipline 04 -->
+<div class="reveal-on-scroll stagger-1 md:col-span-7 group relative bg-surface-container rounded-2xl overflow-hidden min-h-[400px] flex flex-col justify-between p-8 border border-white/5 hover:border-white/10 transition-colors">
+<div class="absolute inset-0 opacity-35 transition-transform duration-700 group-hover:scale-105 bg-cover bg-center" style="background-image: url('img/discipline4.png')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container via-surface-container/50 to-transparent"></div>
+<div class="relative z-10">
+<span class="font-mono text-xs text-secondary tracking-widest uppercase">04 // Combat</span>
+</div>
+<div class="relative z-10">
+<h3 class="font-bold text-2xl sm:text-3xl text-on-surface group-hover:text-primary transition-colors">
+              Combat & Martial Arts
+            </h3>
+<p class="text-on-surface-variant text-sm sm:text-base mt-2 max-w-lg">
+              Muay Thai mechanics, boxing precision, and heavy-bag power intervals led by champion coaches.
+            </p>
+<div class="mt-6 flex items-center gap-2 text-xs font-mono text-secondary">
+<span>View Protocol</span>
+<span class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 3: ATLAS MERCHANDISE -->
+<section class="w-full max-w-7xl mx-auto px-6 md:px-10 py-24 scroll-mt-20" id="merchandise">
+<div class="reveal-on-scroll flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+<div>
+<span class="text-xs font-mono uppercase tracking-widest text-secondary">Equipment & Apparel</span>
+<h2 class="font-extrabold text-3xl sm:text-5xl tracking-tight text-on-surface mt-2">
+            Get Fit in Style with Atlas Merchandise
+          </h2>
+<p class="text-on-surface-variant text-base mt-2">
+            Engineered hardware and performance layers crafted for members.
+          </p>
+</div>
+<!-- Carousel Navigation Controls -->
+<div class="flex items-center gap-3">
+<button aria-label="Previous Item" class="w-11 h-11 rounded-full bg-surface-container border border-white/10 hover:bg-white hover:text-black text-on-surface flex items-center justify-center transition-all duration-200" onclick="scrollCarousel(-1)">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+</button>
+<button aria-label="Next Item" class="w-11 h-11 rounded-full bg-primary text-white hover:bg-[#e0400c] flex items-center justify-center transition-all duration-200 shadow-md shadow-primary/20" onclick="scrollCarousel(1)">
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Clean 6-Card Carousel -->
+<div class="reveal-on-scroll relative w-full">
+<div class="flex gap-6 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory pb-4" id="merch-carousel" style="scroll-snap-type: x mandatory;">
+<!-- Product 1 -->
+<div class="w-[82vw] sm:w-[320px] lg:w-[350px] shrink-0 snap-start group bg-surface-container rounded-2xl overflow-hidden border border-white/5 flex flex-col justify-between">
+<div class="relative h-72 w-full overflow-hidden bg-surface-container-lowest">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style="background-image: url(img/can.jpg)"></div>
+</div>
+<div class="p-6 flex flex-col gap-4">
+<div>
+<h3 class="font-bold text-lg text-on-surface">Obsidian Smart Vessel</h3>
+<p class="text-sm text-on-surface-variant mt-1">Thermal vacuum insulation with UV-C sanitization.</p>
+</div>
+<div class="flex items-center justify-between pt-3 border-t border-white/5">
+<span class="font-bold text-xl text-on-surface">$65.00</span>
+<button class="px-5 py-2 bg-primary text-white font-semibold text-xs rounded-full hover:bg-[#e0400c] transition-colors" data-name="Obsidian Smart Vessel" data-price="65.00" onclick="addToCart(this)">
+                  Quick Add
+                </button>
+</div>
+</div>
+</div>
+<!-- Product 2 -->
+<div class="w-[82vw] sm:w-[320px] lg:w-[350px] shrink-0 snap-start group bg-surface-container rounded-2xl overflow-hidden border border-white/5 flex flex-col justify-between">
+<div class="relative h-72 w-full overflow-hidden bg-surface-container-lowest">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style="background-image: url('img/bag.jpg')"></div>
+</div>
+<div class="p-6 flex flex-col gap-4">
+<div>
+<h3 class="font-bold text-lg text-on-surface">Apex 45L Tactical Duffel</h3>
+<p class="text-sm text-on-surface-variant mt-1">Ballistic Cordura weave with FIDLOCK hardware.</p>
+</div>
+<div class="flex items-center justify-between pt-3 border-t border-white/5">
+<span class="font-bold text-xl text-on-surface">$185.00</span>
+<button class="px-5 py-2 bg-primary text-white font-semibold text-xs rounded-full hover:bg-[#e0400c] transition-colors" data-name="Apex 45L Tactical Duffel" data-price="185.00" onclick="addToCart(this)">
+                  Quick Add
+                </button>
+</div>
+</div>
+</div>
+<!-- Product 3 -->
+<div class="w-[82vw] sm:w-[320px] lg:w-[350px] shrink-0 snap-start group bg-surface-container rounded-2xl overflow-hidden border border-white/5 flex flex-col justify-between">
+<div class="relative h-72 w-full overflow-hidden bg-surface-container-lowest">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style="background-image: url('img/shirt.jpg')"></div>
+</div>
+<div class="p-6 flex flex-col gap-4">
+<div>
+<h3 class="font-bold text-lg text-on-surface">Kinetic V2 Technical Shell</h3>
+<p class="text-sm text-on-surface-variant mt-1">Adaptive micro-pore membrane for cold-weather conditioning.</p>
+</div>
+<div class="flex items-center justify-between pt-3 border-t border-white/5">
+<span class="font-bold text-xl text-on-surface">$220.00</span>
+<button class="px-5 py-2 bg-primary text-white font-semibold text-xs rounded-full hover:bg-[#e0400c] transition-colors" data-name="Kinetic V2 Technical Shell" data-price="220.00" onclick="addToCart(this)">
+                  Quick Add
+                </button>
+</div>
+</div>
+</div>
+<!-- Product 4 -->
+<div class="w-[82vw] sm:w-[320px] lg:w-[350px] shrink-0 snap-start group bg-surface-container rounded-2xl overflow-hidden border border-white/5 flex flex-col justify-between">
+<div class="relative h-72 w-full overflow-hidden bg-surface-container-lowest">
+<div 
+  class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+  style="background-image: url('img/shoe.jpg');">
+</div>
+</div>
+<div class="p-6 flex flex-col gap-4">
+<div>
+<h3 class="font-bold text-lg text-on-surface">Carbon Recovery Slides</h3>
+<p class="text-sm text-on-surface-variant mt-1">Sculpted post-session footwear with carbon rocker shank.</p>
+</div>
+<div class="flex items-center justify-between pt-3 border-t border-white/5">
+<span class="font-bold text-xl text-on-surface">$110.00</span>
+<button class="px-5 py-2 bg-primary text-white font-semibold text-xs rounded-full hover:bg-[#e0400c] transition-colors" data-name="Carbon Recovery Slides" data-price="110.00" onclick="addToCart(this)">
+                  Quick Add
+                </button>
+</div>
+</div>
+</div>
+<!-- Product 5 -->
+<div class="w-[82vw] sm:w-[320px] lg:w-[350px] shrink-0 snap-start group bg-surface-container rounded-2xl overflow-hidden border border-white/5 flex flex-col justify-between">
+<div class="relative h-72 w-full overflow-hidden bg-surface-container-lowest">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style="background-image: url('img/suit.jpg')"></div>
+</div>
+<div class="p-6 flex flex-col gap-4">
+<div>
+<h3 class="font-bold text-lg text-on-surface">Compression Muscle Tight</h3>
+<p class="text-sm text-on-surface-variant mt-1">Zoned compression with far-infrared active ceramic fibers.</p>
+</div>
+<div class="flex items-center justify-between pt-3 border-t border-white/5">
+<span class="font-bold text-xl text-on-surface">$140.00</span>
+<button class="px-5 py-2 bg-primary text-white font-semibold text-xs rounded-full hover:bg-[#e0400c] transition-colors" data-name="Compression Muscle Tight" data-price="140.00" onclick="addToCart(this)">
+                  Quick Add
+                </button>
+</div>
+</div>
+</div>
+<!-- Product 6 -->
+<div class="w-[82vw] sm:w-[320px] lg:w-[350px] shrink-0 snap-start group bg-surface-container rounded-2xl overflow-hidden border border-white/5 flex flex-col justify-between">
+<div class="relative h-72 w-full overflow-hidden bg-surface-container-lowest">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style="background-image: url('img/belt.jpg')"></div>
+</div>
+<div class="p-6 flex flex-col gap-4">
+<div>
+<h3 class="font-bold text-lg text-on-surface">Pulse Pro Grip Straps</h3>
+<p class="text-sm text-on-surface-variant mt-1">Aircraft aluminum D-rings with silicone micro-tack webbing.</p>
+</div>
+<div class="flex items-center justify-between pt-3 border-t border-white/5">
+<span class="font-bold text-xl text-on-surface">$85.00</span>
+<button class="px-5 py-2 bg-primary text-white font-semibold text-xs rounded-full hover:bg-[#e0400c] transition-colors" data-name="Pulse Pro Grip Straps" data-price="85.00" onclick="addToCart(this)">
+                  Quick Add
+                </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 4: MEMBERSHIP TEASER -->
+<section class="w-full bg-surface-container-lowest py-28 scroll-mt-20 border-t border-white/5" id="membership">
+<div class="max-w-7xl mx-auto px-6 md:px-10 flex flex-col md:flex-row items-center justify-between gap-10 text-center md:text-left">
+<div>
+<span class="text-xs font-mono uppercase tracking-widest text-secondary">Membership</span>
+<h2 class="font-extrabold text-3xl sm:text-5xl tracking-tight text-on-surface mt-2">
+            Select Your Membership
+          </h2>
+<p class="text-on-surface-variant text-base sm:text-lg mt-3 max-w-xl">
+            Three calibrated tiers, from single-sanctuary access to unrestricted global entry. Compare plans and enroll on our membership page.
+          </p>
+</div>
+<a class="shrink-0 inline-flex items-center justify-center gap-3 px-8 py-3.5 bg-primary text-white font-semibold text-sm rounded-full hover:bg-[#e0400c] shadow-xl shadow-primary/25 transition-all duration-300 group" href="membership.html">
+<span>View Membership Tiers</span>
+<span class="material-symbols-outlined text-[18px] transition-transform group-hover:translate-x-0.5">arrow_forward</span>
+</a>
+</div>
+</section>
+<!-- PRIVATE TOUR MODAL -->
+<div class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4" id="tour-drawer">
+<div class="w-full max-w-md bg-surface-container rounded-2xl p-8 border border-white/10 shadow-2xl relative">
+<button class="absolute top-5 right-5 text-on-surface-variant hover:text-white" onclick="document.getElementById('tour-drawer').classList.add('hidden')">
+<span class="material-symbols-outlined">close</span>
+</button>
+<span class="text-xs font-mono uppercase tracking-widest text-secondary">Private Invitation</span>
+<h3 class="font-bold text-2xl text-on-surface mt-1">Schedule Walkthrough</h3>
+<p class="text-sm text-on-surface-variant mt-2 mb-6">
+          Experience our sanctuary firsthand with a 40-minute guided briefing.
+        </p>
+<form class="space-y-4" onsubmit="event.preventDefault(); alert('Request received. Our concierge will contact you promptly.'); document.getElementById('tour-drawer').classList.add('hidden');">
+<div>
+<label class="block text-xs font-mono uppercase text-on-surface-variant mb-1">Full Name</label>
+<input class="w-full bg-surface-container-high border border-white/10 rounded-xl px-4 py-2.5 text-sm text-on-surface placeholder:text-neutral-600 focus:outline-none focus:border-primary" placeholder="Alexander Vance" required="" type="text"/>
+</div>
+<div>
+<label class="block text-xs font-mono uppercase text-on-surface-variant mb-1">Email</label>
+<input class="w-full bg-surface-container-high border border-white/10 rounded-xl px-4 py-2.5 text-sm text-on-surface placeholder:text-neutral-600 focus:outline-none focus:border-primary" placeholder="vance@executive.com" required="" type="email"/>
+</div>
+<div>
+<label class="block text-xs font-mono uppercase text-on-surface-variant mb-1">Preferred Location</label>
+<select class="w-full bg-surface-container-high border border-white/10 rounded-xl px-4 py-2.5 text-sm text-on-surface focus:outline-none focus:border-primary">
+<option>SoHo • 480 Broome St, New York</option>
+<option>Mayfair • 14 Berkeley Sq, London</option>
+<option>Ginza • 6-10-1 Ginza, Tokyo</option>
+<option>Beverly Hills • Sunset Blvd, Los Angeles</option>
+</select>
+</div>
+<button class="w-full py-3.5 bg-primary text-white font-semibold text-sm rounded-full hover:bg-[#e0400c] shadow-lg shadow-primary/20 transition-all mt-2" type="submit">
+            Confirm Reservation
+          </button>
+</form>
+</div>
+</div>
+<!-- PROFILE / ACCOUNT MODAL -->
+<div class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4" id="profile-drawer">
+<div class="w-full max-w-md bg-surface-container rounded-2xl p-8 border border-white/10 shadow-2xl relative">
+<button class="absolute top-5 right-5 text-on-surface-variant hover:text-white" onclick="document.getElementById('profile-drawer').classList.add('hidden')">
+<span class="material-symbols-outlined">close</span>
+</button>
+<span class="text-xs font-mono uppercase tracking-widest text-secondary">Member Access</span>
+<h3 class="font-bold text-2xl text-on-surface mt-1">Sign In to Atlas</h3>
+<p class="text-sm text-on-surface-variant mt-2 mb-6">
+          Access your bookings, billing, and biometric dashboard.
+        </p>
+<form class="space-y-4" onsubmit="event.preventDefault(); alert('Signed in. Welcome back to the Sanctuary.'); document.getElementById('profile-drawer').classList.add('hidden');">
+<div>
+<label class="block text-xs font-mono uppercase text-on-surface-variant mb-1">Email</label>
+<input class="w-full bg-surface-container-high border border-white/10 rounded-xl px-4 py-2.5 text-sm text-on-surface placeholder:text-neutral-600 focus:outline-none focus:border-primary" placeholder="you@executive.com" required="" type="email"/>
+</div>
+<div>
+<label class="block text-xs font-mono uppercase text-on-surface-variant mb-1">Password</label>
+<input class="w-full bg-surface-container-high border border-white/10 rounded-xl px-4 py-2.5 text-sm text-on-surface placeholder:text-neutral-600 focus:outline-none focus:border-primary" placeholder="••••••••" required="" type="password"/>
+</div>
+<button class="w-full py-3.5 bg-primary text-white font-semibold text-sm rounded-full hover:bg-[#e0400c] shadow-lg shadow-primary/20 transition-all mt-2" type="submit">
+            Sign In
+          </button>
+</form>
+<p class="text-xs text-on-surface-variant mt-5 text-center">
+          Not a member yet?
+          <a class="text-secondary hover:text-white transition-colors" href="membership.html">Join the Club →</a>
+        </p>
+</div>
+</div>
+<!-- CART MODAL -->
+<div class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4" id="cart-drawer">
+<div class="w-full max-w-md bg-surface-container rounded-2xl p-8 border border-white/10 shadow-2xl relative">
+<button class="absolute top-5 right-5 text-on-surface-variant hover:text-white" onclick="document.getElementById('cart-drawer').classList.add('hidden')">
+<span class="material-symbols-outlined">close</span>
+</button>
+<span class="text-xs font-mono uppercase tracking-widest text-secondary">Your Bag</span>
+<h3 class="font-bold text-2xl text-on-surface mt-1">Atlas Cart</h3>
+<div class="mt-6 space-y-3 max-h-[280px] overflow-y-auto no-scrollbar" id="cart-items"></div>
+<p class="text-sm text-on-surface-variant py-8 text-center" id="cart-empty-msg">Your cart is empty. Quick Add a product to begin.</p>
+<div class="mt-6 pt-6 border-t border-white/10 flex items-center justify-between">
+<span class="text-xs font-mono uppercase text-on-surface-variant">Total</span>
+<span class="font-extrabold text-2xl text-on-surface" id="cart-total">$0.00</span>
+</div>
+<button class="w-full py-3.5 bg-primary text-white font-semibold text-sm rounded-full hover:bg-[#e0400c] shadow-lg shadow-primary/20 transition-all mt-4" onclick="checkoutCart()">
+          Checkout
+        </button>
+</div>
+</div>
+</main>
+<!-- LUXURY FOOTER -->
+<footer class="w-full bg-surface-container-lowest border-t border-white/5 py-16 text-on-surface-variant text-sm" id="locations">
+<div class="max-w-7xl mx-auto px-6 md:px-10">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-white/5">
+<!-- Brand Column -->
+<div class="md:col-span-4 flex flex-col gap-4">
+<div class="flex items-center gap-2">
+<span class="font-bold text-lg text-white">Atlas Sanctuary</span>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed max-w-sm">
+            Private high-performance biometric conditioning and restorative architecture engineered for the vanguard athlete.
+          </p>
+<div class="text-xs font-mono text-secondary mt-2">
+            Concierge: +1 (212) 840-0200
+          </div>
+</div>
+<!-- Locations -->
+<div class="md:col-span-5 grid grid-cols-2 gap-6">
+<div>
+<div class="font-medium text-white text-sm mb-2">Sanctuaries</div>
+<ul class="space-y-2 text-xs">
+<li>SoHo • New York</li>
+<li>Mayfair • London</li>
+<li>Ginza • Tokyo</li>
+<li>Beverly Hills • Los Angeles</li>
+</ul>
+</div>
+<div>
+<div class="font-medium text-white text-sm mb-2">Navigation</div>
+<ul class="space-y-2 text-xs">
+<li><a class="hover:text-white transition-colors" href="#disciplines">Disciplines</a></li>
+<li><a class="hover:text-white transition-colors" href="#merchandise">Club Shop</a></li>
+<li><a class="hover:text-white transition-colors" href="membership.html">Membership</a></li>
+<li><a class="hover:text-white transition-colors" href="#tour-drawer" onclick="document.getElementById('tour-drawer').classList.remove('hidden')">Book Tour</a></li>
+</ul>
+</div>
+</div>
+<!-- Dispatch -->
+<div class="md:col-span-3 flex flex-col gap-3">
+<div class="font-medium text-white text-sm">Private Dispatch</div>
+<p class="text-xs text-on-surface-variant">Confidential announcements and seasonal masterclass allocations.</p>
+<form class="flex items-center bg-surface-container rounded-full border border-white/10 p-1" onsubmit="event.preventDefault(); alert('Subscribed to private dispatch.'); this.reset();">
+<input class="w-full bg-transparent px-3 text-xs text-white focus:outline-none placeholder:text-neutral-600" placeholder="Your email address" required="" type="email"/>
+<button class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center shrink-0 hover:bg-[#e0400c] transition-colors" type="submit">
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</form>
+</div>
+</div>
+<!-- Legal / Copyright -->
+<div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-outline">
+<div>© 2025 ATLAS SANCTUARY. ALL RIGHTS RESERVED.</div>
+<div class="flex gap-6">
+<a class="hover:text-white transition-colors" href="#">Privacy</a>
+<a class="hover:text-white transition-colors" href="#">Terms</a>
+<a class="hover:text-white transition-colors" href="#">Biometrics</a>
+</div>
+</div>
+</div>
+</footer>
+<!-- Motion and Interaction Scripts -->
+<script>
+    // 1. Scroll-driven reveal effects using IntersectionObserver
+    document.addEventListener('DOMContentLoaded', () => {
+      const reveals = document.querySelectorAll('.reveal-on-scroll');
+      
+      const observerOptions = {
+        root: null,
+        rootMargin: '0px 0px -40px 0px',
+        threshold: 0.12
+      };
+
+      const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+
+      reveals.forEach(el => revealObserver.observe(el));
+
+      // Scroll progress & sticky header blur enhancement
+      const progress = document.getElementById('scroll-progress');
+      const header = document.getElementById('site-header');
+
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        if (progress) progress.style.width = scrollPercent + '%';
+
+        if (header) {
+          if (scrollTop > 40) {
+            header.classList.add('bg-background/90', 'shadow-lg');
+            header.classList.remove('bg-background/60');
+          } else {
+            header.classList.remove('bg-background/90', 'shadow-lg');
+            header.classList.add('bg-background/60');
+          }
+        }
+      }, { passive: true });
+    });
+
+    // 2. Carousel Scroll Helper
+    function scrollCarousel(direction) {
+      const container = document.getElementById('merch-carousel');
+      if (container && container.firstElementChild) {
+        const cardWidth = container.firstElementChild.getBoundingClientRect().width + 24;
+        container.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
+      }
+    }
+
+    // 3. Cart System — Quick Add opens a pop-up cart, same pattern as the tour drawer
+    let cart = [];
+
+    function addToCart(button) {
+      const name = button.getAttribute('data-name');
+      const price = parseFloat(button.getAttribute('data-price'));
+      const existing = cart.find(item => item.name === name);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ name, price, qty: 1 });
+      }
+
+      const originalText = button.innerHTML;
+      button.innerHTML = "Added";
+      button.classList.remove("bg-primary", "text-white");
+      button.classList.add("bg-white", "text-black");
+      setTimeout(() => {
+        button.innerHTML = originalText;
+        button.classList.remove("bg-white", "text-black");
+        button.classList.add("bg-primary", "text-white");
+      }, 1400);
+
+      renderCart();
+      openCart();
+    }
+
+    function changeQty(name, delta) {
+      const item = cart.find(i => i.name === name);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) cart = cart.filter(i => i.name !== name);
+      renderCart();
+    }
+
+    function renderCart() {
+      const list = document.getElementById('cart-items');
+      const emptyMsg = document.getElementById('cart-empty-msg');
+      const totalEl = document.getElementById('cart-total');
+      const badge = document.getElementById('cart-badge');
+
+      list.innerHTML = '';
+      if (cart.length === 0) {
+        emptyMsg.classList.remove('hidden');
+      } else {
+        emptyMsg.classList.add('hidden');
+        cart.forEach(item => {
+          const row = document.createElement('div');
+          row.className = 'flex items-center justify-between gap-3 py-3 border-b border-white/5';
+          row.innerHTML = `
+            <div class="min-w-0">
+              <div class="text-sm font-medium text-on-surface truncate">${item.name}</div>
+              <div class="text-xs font-mono text-on-surface-variant mt-0.5">$${item.price.toFixed(2)} each</div>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              <button class="w-6 h-6 rounded-full bg-surface-container-high border border-white/10 text-on-surface flex items-center justify-center hover:border-primary" onclick="changeQty('${item.name.replace(/'/g, "\\'")}', -1)">−</button>
+              <span class="text-sm font-mono w-4 text-center">${item.qty}</span>
+              <button class="w-6 h-6 rounded-full bg-surface-container-high border border-white/10 text-on-surface flex items-center justify-center hover:border-primary" onclick="changeQty('${item.name.replace(/'/g, "\\'")}', 1)">+</button>
+            </div>`;
+          list.appendChild(row);
+        });
+      }
+
+      const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+      totalEl.innerText = '$' + total.toFixed(2);
+
+      const count = cart.reduce((sum, item) => sum + item.qty, 0);
+      if (count > 0) {
+        badge.innerText = count;
+        badge.classList.remove('hidden');
+        badge.classList.add('flex');
+      } else {
+        badge.classList.add('hidden');
+        badge.classList.remove('flex');
+      }
+    }
+
+    function openCart() {
+      document.getElementById('cart-drawer').classList.remove('hidden');
+    }
+
+    function checkoutCart() {
+      if (cart.length === 0) return;
+      alert('Checkout received. Your gear ships within 2 business days.');
+      cart = [];
+      renderCart();
+      document.getElementById('cart-drawer').classList.add('hidden');
+    }
+  </script>
+</body>
+</html>
